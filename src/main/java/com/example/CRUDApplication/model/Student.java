@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data // Getter setter
 @Entity // Creates orm
 public class Student {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto degenrate
     private int id;
