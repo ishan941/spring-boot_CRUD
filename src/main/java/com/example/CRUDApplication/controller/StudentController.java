@@ -2,6 +2,8 @@ package com.example.CRUDApplication.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CRUDApplication.apiResponse.ApiResponse;
 import com.example.CRUDApplication.model.Student;
+import com.example.CRUDApplication.projection.ProjectionDto;
+import com.example.CRUDApplication.repo.StudentRepo;
 import com.example.CRUDApplication.service.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,15 +28,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
 
     @Autowired
-    StudentService studentService;
+    StudentRepo studentRepo;
+
+    private final Logger logger;
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+
+        this.logger = LoggerFactory.getLogger(StudentController.class);
+        this.studentService = studentService;
+
+    }
 
     @PostMapping("/saveStudent")
     public ResponseEntity<ApiResponse> postMethodName(@RequestBody Student student) {
         try {
-            studentService.save(student);
-            ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value())
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+            Student student3 = studentRepo.findByName(student.getName());
+            if (student3 == null) {
+                studentService.save(student);
+
+                ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value())
+                        .build();
+                return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+
+            } else {
+                ApiResponse apiResponse = ApiResponse.builder().messsage("User already exist")
+                        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .build();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
+
+            }
         } catch (Exception exception) {
             ApiResponse apiResponse = ApiResponse.builder().messsage("Error")
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -65,6 +90,18 @@ public class StudentController {
         studentService.update(id, student);
         ApiResponse apiResponse = ApiResponse.builder().messsage("Successfully updated")
                 .statusCode(HttpStatus.OK.value()).build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/getLimited")
+    public ResponseEntity<ApiResponse> getLimited() {
+        List<ProjectionDto> list = studentService.getPerticularField();
+        for (ProjectionDto lProjectionDto : list) {
+            logger.info("UserData", lProjectionDto.getName(), lProjectionDto.getRollNo());
+        }
+
+        ApiResponse apiResponse = ApiResponse.<ProjectionDto>builder().messsage("Successfully fecth")
+                .statusCode(HttpStatus.OK.value()).listData(list).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
