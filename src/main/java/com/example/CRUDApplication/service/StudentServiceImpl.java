@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.CRUDApplication.model.Student;
+import com.example.CRUDApplication.projection.ProjectionDto;
+import com.example.CRUDApplication.projection.ProjectionInt;
 import com.example.CRUDApplication.repo.StudentRepo;
 
 @Service
@@ -50,6 +52,28 @@ public class StudentServiceImpl implements StudentService {
             studentRepo.save(preseStudent);
 
         }
+    }
+
+    //
+    // Get Perticular
+    @Override
+    public List<ProjectionDto> getPerticularField() {
+
+        try {
+            List<ProjectionInt> projectionList = studentRepo.getPerticulatFunction();
+            for (ProjectionInt abInt : projectionList) {
+                abInt.getName();
+                abInt.getRollNo();
+            }
+            List<ProjectionDto> projectionDtos = new ArrayList<>();
+            for (ProjectionInt abInt : projectionList) {
+                projectionDtos.add(new ProjectionDto(abInt.getName(), abInt.getRollNo()));
+            }
+            return projectionDtos;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error: " + ex.getMessage());
+        }
+
     }
 
 }
