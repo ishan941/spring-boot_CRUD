@@ -1,6 +1,7 @@
 package com.example.CRUDApplication.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,10 +14,12 @@ import com.example.CRUDApplication.projection.ProjectionInt;
 public interface StudentRepo extends JpaRepository<Student, Integer> {
     //
     // Jpql(java persestend qury language)
-    @Query("select S.name as name, S.rollNo as rollNo from Student S")
+    @Query("select S.username as name, S.roll as roll from Student S")
     public List<ProjectionInt> getPerticulatFunction();
 
     // Custom method finder
-    public Student findByName(String name);
+    public Student findByUsername(String username);
+
+    public Optional<Student> findByEmail(String email);
 
 }

@@ -1,0 +1,1 @@
+Alter table student add column password VARCHAR(230); 

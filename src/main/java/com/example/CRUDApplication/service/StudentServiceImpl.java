@@ -40,14 +40,14 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> oStudent = studentRepo.findById(id);
         if (oStudent.isPresent()) {
             Student preseStudent = oStudent.get();
-            if (student.getName() != null) {
-                preseStudent.setName(student.getName());
+            if (student.getUsername() != null) {
+                preseStudent.setUsername(student.getUsername());
             }
-            if (student.getGrade() != 0) {
-                preseStudent.setGrade(student.getGrade());
+            if (student.getStudentgrade() != 0) {
+                preseStudent.setStudentgrade(student.getStudentgrade());
             }
-            if (student.getRollNo() != 0) {
-                preseStudent.setRollNo(student.getRollNo());
+            if (student.getRoll() != 0) {
+                preseStudent.setRoll(student.getRoll());
             }
             studentRepo.save(preseStudent);
 
@@ -63,11 +63,11 @@ public class StudentServiceImpl implements StudentService {
             List<ProjectionInt> projectionList = studentRepo.getPerticulatFunction();
             for (ProjectionInt abInt : projectionList) {
                 abInt.getName();
-                abInt.getRollNo();
+                abInt.getRoll();
             }
             List<ProjectionDto> projectionDtos = new ArrayList<>();
             for (ProjectionInt abInt : projectionList) {
-                projectionDtos.add(new ProjectionDto(abInt.getName(), abInt.getRollNo()));
+                projectionDtos.add(new ProjectionDto(abInt.getName(), abInt.getRoll()));
             }
             return projectionDtos;
         } catch (Exception ex) {

@@ -28,4 +28,8 @@ public class ApiResponse<T> {
     @JsonProperty("ListData")
     private List<T> listData;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("AccessToken")
+    private String token;
+
 }

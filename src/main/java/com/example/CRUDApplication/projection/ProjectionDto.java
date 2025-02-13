@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProjectionDto {
-    private String name;
-    private int rollNo;
+    private String username;
+    private int roll;
 }
