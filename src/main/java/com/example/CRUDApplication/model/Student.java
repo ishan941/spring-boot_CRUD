@@ -4,13 +4,18 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,6 +47,13 @@ public class Student implements UserDetails {
     @Email(message = "Valid email required")
     private String email;
 
+    private String rolename;
+
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    @JsonBackReference("userrole")
+    private Role role;
+
     public Student setUsername(String username) {
         this.username = username;
         return this;
@@ -62,9 +74,15 @@ public class Student implements UserDetails {
         return this;
     }
 
+    public Student setRolename(String rolename) {
+        this.rolename = rolename;
+        return this;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + rolename);
+        return List.of(authority);
     }
 
     public String getPassword() {
@@ -73,7 +91,7 @@ public class Student implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

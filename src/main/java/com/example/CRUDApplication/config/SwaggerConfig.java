@@ -15,7 +15,9 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("bearerAuth",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth")); // Ensure JWT is required for all
+                                                                                   // paths
     }
 
 }
