@@ -1,0 +1,1 @@
+Alter table student add column rolename VARCHAR(255);
