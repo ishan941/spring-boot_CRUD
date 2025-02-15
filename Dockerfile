@@ -1,8 +1,9 @@
 # Use OpenJDK 17 with Alpine Linux
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-slim
+
 
 # Install Maven
-RUN apk add --no-cache maven
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory in the container
 WORKDIR /app
@@ -21,4 +22,6 @@ RUN mvn package -DskipTests
 EXPOSE 8028
 
 # Set the entry point for the container
-CMD ["java", "-jar", "target/CRUDApplication-0.0.1-SNAPSHOT.jar"]
+COPY target/CRUDApplication-0.0.1-SNAPSHOT.jar /app/CRUDApplication-0.0.1-SNAPSHOT.jar
+CMD ["java", "-jar", "/app/CRUDApplication-0.0.1-SNAPSHOT.jar"]
+
