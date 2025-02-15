@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./  # Ensure we're using the correct directory for context
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/CRUDApplication  # Syncs the local directory with the container
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ProjjectII
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Shakti
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: postgres-database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ProjjectII
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Shakti
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data: {}
