@@ -78,13 +78,11 @@ public class Student implements UserDetails {
         this.rolename = rolename;
         return this;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + rolename);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRoleEnum().name());
         return List.of(authority);
     }
-
     public String getPassword() {
         return password;
     }

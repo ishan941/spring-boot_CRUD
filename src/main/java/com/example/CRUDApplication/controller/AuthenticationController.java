@@ -1,8 +1,11 @@
 package com.example.CRUDApplication.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CRUDApplication.Dto.LoginUserDto;
@@ -12,8 +15,13 @@ import com.example.CRUDApplication.model.Student;
 import com.example.CRUDApplication.repo.StudentRepo;
 import com.example.CRUDApplication.service.AuthenticationService;
 import com.example.CRUDApplication.service.JwtService;
+import com.example.CRUDApplication.service.StudentService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class AuthenticationController {
@@ -24,6 +32,13 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
+private final  StudentService studentService;
+
+
+
+public AuthenticationController(StudentService studentService ){
+    this.studentService=studentService;
+}
     @PostMapping("/registeruser")
     public ResponseEntity<ApiResponse> postMethodName(@RequestBody RegisterUserDto registerUserDto) {
         authenticationService.signup(registerUserDto);
@@ -40,5 +55,18 @@ public class AuthenticationController {
                 .token(jwtToken).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/path")
+    public ResponseEntity<ApiResponse> getMethodName(@RequestParam String param) {
+     List<Student>list=studentService.getStudent();
+ 
+    ApiResponse response=ApiResponse.<Student>builder().messsage("suceeefully fetched user").statusCode(HttpStatus.OK.value()).listData(list).build();
+    return ResponseEntity.status(HttpStatus.OK).body( response);
+
+        
+    }
+    
 
 }

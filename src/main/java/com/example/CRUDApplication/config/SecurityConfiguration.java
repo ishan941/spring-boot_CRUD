@@ -44,12 +44,14 @@ public class SecurityConfiguration {
                                                                 "/swagger-resources/**",
                                                                 "/swagger-ui.html")
                                                 .permitAll()
+                                                .requestMatchers("/path").hasAuthority("ROLE_ADMIN") // Ensure this matches the authority in the token
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(management -> management
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                                
 
                 return http.build();
         }
