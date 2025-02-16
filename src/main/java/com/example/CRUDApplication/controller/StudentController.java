@@ -1,12 +1,14 @@
 package com.example.CRUDApplication.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,7 +51,7 @@ public class StudentController {
 
     public ResponseEntity<ApiResponse> postMethodName(@Valid @RequestBody Student student) {
         try {
-            Student student3 = studentRepo.findByUsername(student.getUsername());
+           Optional<Student>student3 = studentRepo.findByUsername(student.getUsername());
             if (student3 == null) {
                 studentService.save(student);
 
@@ -99,6 +101,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('USER')")
     @GetMapping("/getLimited")
     public ResponseEntity<ApiResponse> getLimited() {
         List<ProjectionDto> list = studentService.getPerticularField();

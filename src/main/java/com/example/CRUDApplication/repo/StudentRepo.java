@@ -18,7 +18,7 @@ public interface StudentRepo extends JpaRepository<Student, Integer> {
     public List<ProjectionInt> getPerticulatFunction();
 
     // Custom method finder
-    public Student findByUsername(String username);
+    public Optional<Student> findByUsername(String username);
 
     public Optional<Student> findByEmail(String email);
 
