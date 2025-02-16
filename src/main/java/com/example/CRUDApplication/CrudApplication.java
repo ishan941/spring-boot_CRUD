@@ -7,6 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 
 @SpringBootApplication
+// mvn clean package -DskipTests
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableAdminServer
 public class CrudApplication {

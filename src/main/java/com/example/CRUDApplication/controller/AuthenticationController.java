@@ -48,14 +48,15 @@ public class AuthenticationController {
     @PostMapping("/loginuser")
     public ResponseEntity<ApiResponse> postlogin(@RequestBody LoginUserDto loggLoginUserDto) {
         Student student = authenticationService.authenticate(loggLoginUserDto);
-        String jwtToken = jwtService.generateToken(student);
-        ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value())
-                .token(jwtToken).build();
+        String role=student.getRole().getRoleEnum().toString();
+        String jwtToken = jwtService.generateToken(student);    
+        ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value()).token(jwtToken).role(role).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+  
     @GetMapping("/path")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getMethodName() {
         List<Student> list = studentService.getStudent();
 

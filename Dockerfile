@@ -19,7 +19,7 @@ COPY . .
 RUN mvn package -DskipTests
 
 # Expose the port your Spring Boot application uses
-EXPOSE 8028
+EXPOSE 8081
 
 # Set the entry point for the container
 COPY target/CRUDApplication-0.0.1-SNAPSHOT.jar /app/CRUDApplication-0.0.1-SNAPSHOT.jar
