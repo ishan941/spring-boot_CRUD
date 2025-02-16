@@ -55,8 +55,8 @@ public class AuthenticationController {
     }
 
   
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('USER')")
     @GetMapping("/path")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getMethodName() {
         List<Student> list = studentService.getStudent();
 

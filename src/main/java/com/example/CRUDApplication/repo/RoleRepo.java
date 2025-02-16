@@ -12,4 +12,6 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
 
     public Role findByRoleEnum(RoleEnum roleEnum);
 
+    
+
 }

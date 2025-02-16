@@ -47,8 +47,7 @@ public class SecurityConfiguration {
                         "/swagger-resources/**",
                         "/swagger-ui.html")
                 .permitAll()
-                .requestMatchers("/path").hasRole("ADMIN")  // Ensure this matches the authority format
-                .anyRequest()
+                .requestMatchers("/path").hasRole("ADMIN").anyRequest()  // Ensure this matches the authority format                
                 .authenticated())
             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
@@ -63,25 +62,25 @@ public class SecurityConfiguration {
 //         return authenticationConfiguration.getAuthenticationManager();
 //     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("USER")
-                .password("{noop}password") // No password encoding (for testing only)
-                .roles("USER") // Stored as "ROLE_USER"
-                .build();
+    // @Bean
+    // public UserDetailsService userDetailsService() {
+    //     UserDetails user = User.withUsername("USER")
+    //             .password("{noop}password") // No password encoding (for testing only)
+    //             .roles("USER") // Stored as "ROLE_USER"
+    //             .build();
 
-        UserDetails admin = User.withUsername("ADMIN")
-                .password("{noop}password") // No password encoding (for testing only)
-                .roles("ADMIN") // Stored as "ROLE_ADMIN"
-                .build();
+    //     UserDetails admin = User.withUsername("ADMIN")
+    //             .password("{noop}password") // No password encoding (for testing only)
+    //             .roles("ADMIN") // Stored as "ROLE_ADMIN"
+    //             .build();
 
-                UserDetails driver = User.withUsername("DRIVER")
-                .password("{noop}password") // No password encoding (for testing only)
-                .roles("DRIVER") // Stored as "ROLE_ADMIN"
-                .build();
+    //             UserDetails driver = User.withUsername("DRIVER")
+    //             .password("{noop}password") // No password encoding (for testing only)
+    //             .roles("DRIVER") // Stored as "ROLE_ADMIN"
+    //             .build();
 
-        return new InMemoryUserDetailsManager(user, admin,driver);
-    }
+    //     return new InMemoryUserDetailsManager(user, admin,driver);
+    // }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

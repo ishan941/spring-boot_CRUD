@@ -92,7 +92,6 @@ public class Student implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRoleEnum().toString());
-
         return List.of(authority);
     }
 
