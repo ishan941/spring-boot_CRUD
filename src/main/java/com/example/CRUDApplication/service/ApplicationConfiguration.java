@@ -29,7 +29,7 @@ public class ApplicationConfiguration {
     @Bean
 UserDetailsService userDetailsService() {
     return username -> {
-        Optional<Student> studentOptional = studentRepo.findByEmail(username);
+        Optional<Student> studentOptional = studentRepo.findByUsername(username);
         if (studentOptional.isPresent()) {
             Student student = studentOptional.get();
             return new org.springframework.security.core.userdetails.User(

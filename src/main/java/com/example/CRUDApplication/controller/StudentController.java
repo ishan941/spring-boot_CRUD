@@ -1,6 +1,7 @@
 package com.example.CRUDApplication.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class StudentController {
 
     public ResponseEntity<ApiResponse> postMethodName(@Valid @RequestBody Student student) {
         try {
-            Student student3 = studentRepo.findByUsername(student.getUsername());
+           Optional<Student>student3 = studentRepo.findByUsername(student.getUsername());
             if (student3 == null) {
                 studentService.save(student);
 
