@@ -1,7 +1,9 @@
 package com.example.CRUDApplication.service;
 
+import java.lang.StackWalker.Option;
+import java.util.Optional;
 
-
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,26 +39,26 @@ public class AuthenticationService {
         this.studentRepo = studentRepo;
         this.passwordEncoder = passwordEncoder;
         this.roleRepo = roleRepo;
-        this.logger=LoggerFactory.getLogger(AuthenticationService.class);
+        this.logger = LoggerFactory.getLogger(AuthenticationService.class);
     }
 
     public Student signup(RegisterUserDto input) {
         try {
-            Role role = roleRepo.findByRoleEnum(RoleEnum.valueOf(input.getRole()));
+            Role role = (roleRepo.findByRoleEnum(RoleEnum.valueOf(input.getRole())));
+
             logger.debug("Role found: {}", role);
             if (role == null) {
-                Role role2 = new Role();
-                role2.setRoleEnum(RoleEnum.valueOf(input.getRole()));
-                roleRepo.save(role2);
-                role = role2;
-                logger.debug("New role created: {}", role);
+                return null;
             }
+
             Student student = new Student();
             student.setRole(role);
+
             student.setUsername(input.getUsername())
-                   .setEmail(input.getEmail())
-                   .setPassword(passwordEncoder.encode(input.getPassword())).setRolename(input.getRole());
+                    .setEmail(input.getEmail())
+                    .setPassword(passwordEncoder.encode(input.getPassword())).setRolename(input.getRole());
             Student savedStudent = studentRepo.save(student);
+            Hibernate.initialize(student.getRole());
             logger.debug("Student saved with role: {}", savedStudent.getRole());
             return savedStudent;
         } catch (Exception ex) {

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 public class AuthenticationController {
 
@@ -32,13 +31,12 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
-private final  StudentService studentService;
+    private final StudentService studentService;
 
+    public AuthenticationController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
-
-public AuthenticationController(StudentService studentService ){
-    this.studentService=studentService;
-}
     @PostMapping("/registeruser")
     public ResponseEntity<ApiResponse> postMethodName(@RequestBody RegisterUserDto registerUserDto) {
         authenticationService.signup(registerUserDto);
@@ -50,23 +48,22 @@ public AuthenticationController(StudentService studentService ){
     @PostMapping("/loginuser")
     public ResponseEntity<ApiResponse> postlogin(@RequestBody LoginUserDto loggLoginUserDto) {
         Student student = authenticationService.authenticate(loggLoginUserDto);
-        String jwtToken = jwtService.generateToken(student);
-        ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value())
-                .token(jwtToken).build();
+        String role=student.getRole().getRoleEnum().toString();
+        String jwtToken = jwtService.generateToken(student);    
+        ApiResponse apiResponse = ApiResponse.builder().messsage("Success").statusCode(HttpStatus.OK.value()).token(jwtToken).role(role).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-
-    @PreAuthorize("hasAuthority('ADMIN')")
+  
     @GetMapping("/path")
-    public ResponseEntity<ApiResponse> getMethodName(@RequestParam String param) {
-     List<Student>list=studentService.getStudent();
- 
-    ApiResponse response=ApiResponse.<Student>builder().messsage("suceeefully fetched user").statusCode(HttpStatus.OK.value()).listData(list).build();
-    return ResponseEntity.status(HttpStatus.OK).body( response);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> getMethodName() {
+        List<Student> list = studentService.getStudent();
 
-        
+        ApiResponse response = ApiResponse.<Student>builder().messsage("suceeefully fetched user")
+                .statusCode(HttpStatus.OK.value()).listData(list).build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
-    
 
 }

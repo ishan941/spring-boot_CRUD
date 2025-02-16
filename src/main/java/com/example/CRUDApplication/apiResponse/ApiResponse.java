@@ -32,4 +32,11 @@ public class ApiResponse<T> {
     @JsonProperty("AccessToken")
     private String token;
 
+
+   @JsonInclude(JsonInclude.Include.NON_NULL)
+   @JsonProperty("role")
+   private String role;
+
+
+
 }

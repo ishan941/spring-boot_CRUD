@@ -6,7 +6,7 @@ services:
       context: ./  # Ensure we're using the correct directory for context
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8081:8081"
     volumes:
       - .:/CRUDApplication  # Syncs the local directory with the container
     environment:
