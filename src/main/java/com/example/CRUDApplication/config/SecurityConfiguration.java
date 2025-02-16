@@ -56,32 +56,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-//     @Bean
-//     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-//             throws Exception {
-//         return authenticationConfiguration.getAuthenticationManager();
-//     }
-
-    // @Bean
-    // public UserDetailsService userDetailsService() {
-    //     UserDetails user = User.withUsername("USER")
-    //             .password("{noop}password") // No password encoding (for testing only)
-    //             .roles("USER") // Stored as "ROLE_USER"
-    //             .build();
-
-    //     UserDetails admin = User.withUsername("ADMIN")
-    //             .password("{noop}password") // No password encoding (for testing only)
-    //             .roles("ADMIN") // Stored as "ROLE_ADMIN"
-    //             .build();
-
-    //             UserDetails driver = User.withUsername("DRIVER")
-    //             .password("{noop}password") // No password encoding (for testing only)
-    //             .roles("DRIVER") // Stored as "ROLE_ADMIN"
-    //             .build();
-
-    //     return new InMemoryUserDetailsManager(user, admin,driver);
-    // }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
