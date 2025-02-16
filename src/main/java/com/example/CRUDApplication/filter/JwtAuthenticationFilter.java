@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +23,12 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.example.CRUDApplication.service.JwtService;
 
+import io.jsonwebtoken.Claims;
+
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -62,12 +69,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
     
                 if (jwtService.isTokenValid(jwt, userDetails)) {
+                    // Extract roles from the token
+                    Claims claims = jwtService.extractAllClaims(jwt);
+                    @SuppressWarnings("unchecked")
+                    List<String> roles = claims.get("roles", List.class);
+    
+                    // Convert roles to GrantedAuthority
+                    Collection<? extends GrantedAuthority> authorities = roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+    
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
-                            userDetails.getAuthorities());
+                            authorities);
     
-                    logger.debug("User authorities: {}", userDetails.getAuthorities()); // Log authorities
+                    logger.debug("User authorities: {}", authorities); // Log authorities
     
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
